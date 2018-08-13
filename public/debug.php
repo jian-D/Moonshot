@@ -21,15 +21,17 @@ defined('APPLICATION_ENV')
     'debug'));
 
 if (APPLICATION_ENV === 'debug') {
-    error_reporting(E_ALL);
+    error_reporting(E_ERROR | E_WARNING);
     ini_set('display_errors', 1);
 } else {
     error_reporting(E_ERROR);
 }
+define('NG_ROOT',dirname(dirname(__FILE__)));
 
-$config = include '../config/config.debug.inc.php';
 
-require '../vendor/autoload.php';
+$config = include NG_ROOT.'/config/config.debug.inc.php';
+
+require NG_ROOT.'/vendor/autoload.php';
 
 
 $settings = ['settings'=>$config];
@@ -58,36 +60,41 @@ if(!$version) {
         die();
     }
 }
-//载入中间件
-$middle_wares = glob('../middle/*.mw.php');
-if ( $middle_wares ) {
-    foreach ( $middle_wares as $middle_ware) {
-        require $middle_ware;
-    }
-}
-//载入通用的类库
-$libs = glob('../libs/*/*.class.php');
-if ( $libs ) {
-    foreach ( $libs as $lib) {
-        require $lib;
-    }
-}
+
 //载入通用的函数
-$functions = glob('../utils/*.inc.php');
+$functions = glob(NG_ROOT.'/utils/*.inc.php');
 if ( $functions ) {
     foreach ( $functions as $func) {
         require $func;
     }
 }
+//载入通用的类库
+$libs = glob(NG_ROOT.'/libs/*/*.class.php');
+if ( $libs ) {
+    foreach ( $libs as $lib) {
+        require $lib;
+    }
+}
+//载入中间件
+$middle_wares = glob(NG_ROOT.'/middle/*.mw.php');
+if ( $middle_wares ) {
+    foreach ( $middle_wares as $middle_ware) {
+        require $middle_ware;
+    }
+}
 
-$routers = glob('../routers/*.router.php');
+
+
+$routers = glob(NG_ROOT.'/routers/*.router.php');
 if ( $routers ) {
     foreach ( $routers as $router) {
         require $router;
     }
 }
 
-
-
-
+$app->add(new \Slim\Middleware\Session([
+    'name' => 'dummy_session',
+    'autorefresh' => true,
+    'lifetime' => '1 hour'
+]));
 $app->run();

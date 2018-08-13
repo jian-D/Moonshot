@@ -1,0 +1,71 @@
+{% extends 'boot/frame.twig.html' %}
+
+{% block frame_head_script %}
+<style type="text/css">
+    #container .info_header {display: block; overflow: hidden;overflow: hidden;padding: 10px;}
+    #container .info_base {display: block;overflow: hidden;}
+    #container .info_base .info{ margin: 0 20px;overflow: hidden; border-right: 1px dashed #ccc; padding: 0 20px;}
+    #container .block_header {font-weight: bold;}
+    #container .line {clear:both;margin:10px 0; }
+    #container .info_desc {padding: 10px;}
+    #container .indent_content {text-indent: 25px;}
+    #container .info_preview{width: 100%;background: #eee;border: 1px solid #ccc;overflow: hidden;height: 300px;}
+</style>
+{% endblock %}
+
+{% block frame_content %}
+<form class="well form-search" method="post" action="#">
+    <a class="btn btn-danger"  href="{{ back_url|default('#') }}">返回</a>
+</form>
+<div class="info_header">
+
+    {% if plugin_lists %}
+    {% set val = plugin_lists %}
+        <div class="info_base">
+            {% if val.base.icon %}
+            <a href="{{val.info_url}}"><img class="icon" src="/assets/plugin/{{val.file}}/{{val.base.icon}}" /></a>
+            {% else %}
+            <img class="icon" src="#"/>
+            {% endif %}
+            <div class="info">
+                <div class="pl_title"><a href="{{val.info_url}}">{{val.base.title}} V{{val.base.version}}</a></div>
+                <div class="pl_cate">分类 : {{val.base.category}}</div>
+                <!--<div class="pl_info">{{val.base.desc}}</div>-->
+                <div class="pl_author">作者 : {{val.base.author}}</div>
+                <div class="pl_time">时间 : {{val.base.time}}</div>
+                <div class="pl_op">操作 :
+                    {% if val.installed == 1 %}
+                    <a href="{{val.uninstall_url}}">卸载</a>
+                    <a href="{{val.review_url}}">审核</a>
+                    {% else %}
+                    <a href="{{val.install_url}}">安装</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="info">
+                <div class="block_header">属性</div>
+                <div>创建时间 : {{ val.ctime|date("Y m d H:i:s")}}</div>
+                <div>修改时间 : {{ val.ctime|date("Y m d H:i:s")}}</div>
+                <div>管理端 : {% if val.menus.item %}是{% else %}否{% endif %}</div>
+                <div>数据库 : {% if val.install.table %}是{% else %}否{% endif %}</div>
+            </div>
+        </div>
+        <hr class="line"/>
+
+        <div class="info_desc">
+            <div class="block_header">简介:</div>
+            <div class="indent_content ">
+                {{ val.base.desc }}
+            </div>
+        </div>
+
+        <hr class="line"/>
+        {% if val.preview.item %}
+        <div class="info_preview">
+            </div>
+        {% endif %}
+        <hr class="line"/>
+    {% endif %}
+</div>
+{% endblock %}

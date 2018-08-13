@@ -12,7 +12,6 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Container\Container;
 use Illuminate\Events\Dispatcher;
 
-
 //日志中间件
 $container['logger'] = function ($c) {
     $settings = $c->get('settings')['logger'];
@@ -51,6 +50,17 @@ $container['redis'] = function ($c) {
     $redis->set('db_name','yazai_app_db');
     return $redis;
 };
+//文件缓存
+$container['filecache'] = function($c) {
+    $file_cache = new \libs\asyncme\NgFileCache('data/cache/file');
+    return $file_cache;
+};
+
+//session处理
+$container['session'] = function ($c) {
+    return new \SlimSession\Helper;
+};
+
 
 //cos中间件
 $container['cosClient'] = function ($c) {
@@ -63,6 +73,8 @@ $container['cosClient'] = function ($c) {
     return $cosClient;
 };
 
+
+
 //通用头部中间件
 $common_header_mw = function ($request, $response, $next ) {
     $response = $next($request, $response);
@@ -73,3 +85,4 @@ $common_header_mw = function ($request, $response, $next ) {
         ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
         ->withHeader('Content-type', 'application/json');
 };
+

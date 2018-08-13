@@ -7,6 +7,7 @@
  */
 if(!defined('NG_ME')) die();
 
+
 /**
  * json数据封装
  * @param $status
@@ -179,3 +180,108 @@ function getUserAgent()
     $agent = $_SERVER['HTTP_USER_AGENT'];
     return $agent;
 }
+
+function ng_plugins(\libs\asyncme\RequestHelper $asyRequest,\libs\asyncme\Service $pl_service,$custom=[])
+{
+    //权限检查
+
+    return callPlugin($asyRequest,$pl_service,$custom);
+}
+
+/**
+ * 插件点用方法
+ * @param $asyRequest
+ * @param $pl_service
+ * @param array $custom
+ * @return mixed
+ */
+function callPlugin(\libs\asyncme\RequestHelper $asyRequest,\libs\asyncme\Service $pl_service,$custom=[]){
+    $plugin_name = strtolower($asyRequest->request_plugin);
+    $plugin_name_lists = explode("_",$plugin_name);
+    $plugin_class_data = [];
+    foreach ($plugin_name_lists as $plugin_name_item) {
+        $plugin_class_data[] = ucfirst($plugin_name_item);
+    }
+    $plugin_class = implode('',$plugin_class_data);
+
+
+    try {
+
+        if (!file_exists(NG_ROOT.'/plugins/'.$plugin_name.'/'.$plugin_class.'.php')) {
+            throw new Exception("plugins calling :".$plugin_class.' and not invaild');
+        }
+
+        $pl_class = 'plugins\\'.$plugin_name.'\\'.$plugin_class;
+        if (!class_exists($pl_class)) {
+            throw new Exception("plugins class  :".$pl_class.'  not exist');
+        }
+        $pl = new $pl_class(NG_ROOT.'/plugins/'.$plugin_name.'/');
+        $pl->setService($pl_service);
+        $pl_respone = $pl->run($asyRequest);
+
+    } catch (Exception $e){
+        echo $e->getMessage();
+        die();
+    }
+    return $pl_respone;
+}
+
+/**
+ * URL生成
+ * @param $req
+ * @param $path
+ * @param array $query
+ * @param bool $no_host
+ * @return string
+ */
+function urlGen($req,$path,$query=[],$no_host=false)
+{
+    if($req) {
+        //REQUEST_SCHEME
+        $serverParams = $req->getServerParams();
+        $host = $serverParams['HTTP_HOST'];
+        $port = $serverParams['SERVER_PORT']=='80'? '' : ':'.$serverParams['SERVER_PORT'];
+        $request_scheme = $serverParams['REQUEST_SCHEME'];
+        $script_name = $serverParams['SCRIPT_NAME'];
+
+        if (is_array($path)) {
+            $path = implode('/',array_values($path));
+        }
+        if ($path && is_string($path)  && $path[0]!='/') {
+            $path = '/'.$path;
+        }
+        if (is_array($query)) {
+            $querys = [];
+            foreach ($query as $k=>$v) {
+                $querys[] = $k.'='.urlencode($v);
+            }
+            $query = implode('&',$querys);
+        }
+        if ($query && is_string($query) && $query[0]!='?') {
+            $query = '?'.$query;
+        }
+        $res_host = $no_host ? $request_scheme.'://'.$host.$port : '';
+        return $res_host.''.$script_name.''.$path.''.$query;
+
+    }
+
+}
+
+/**
+ * 入库安全
+ * @param $data
+ * @return string
+ */
+function ng_mysql_json_safe_encode($data)
+{
+    return addslashes(json_encode($data,JSON_UNESCAPED_UNICODE));
+}
+
+function dump($data)
+{
+    echo "<pre>";
+    var_dump($data);
+    echo "</pre>";
+}
+
+

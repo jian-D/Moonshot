@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+    <base>
+        <title>系统提示</title>
+        <name>moon_shot</name>
+        <desc><![CDATA[系统提示图]]></desc>
+        <category>default</category>
+        <version>1.0</version>
+        <author>xieq</author>
+        <time>2018-07-10</time>
+        <icon>icon.png</icon>
+    </base>
+    <menus></menus>
+    <install>
+    </install>
+</root>

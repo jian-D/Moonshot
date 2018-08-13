@@ -1,0 +1,32 @@
+{% extends 'boot/frame.twig.html' %}
+
+{% block frame_head_script %}
+<style type="text/css">
+    #container .info_header {display: block; overflow: hidden;overflow: hidden;padding: 10px;}
+    #container .info_base {display: block;overflow: hidden;}
+    #container .info_base .info{ margin: 0 20px;overflow: hidden; border-right: 1px dashed #ccc; padding: 0 20px;}
+    #container .block_header {font-weight: bold;}
+    #container .line {clear:both;margin:10px 0; }
+    #container .info_desc {padding: 10px;}
+    #container .indent_content {text-indent: 25px;}
+    #container .info_preview{width: 100%;background: #eee;border: 1px solid #ccc;overflow: hidden;height: 300px;}
+</style>
+{% endblock %}
+
+{% block frame_content %}
+<form class="well form-search" method="post" action="#">
+    <a class="btn btn-danger"  href="{{ back_url|default('#') }}">返回</a>
+
+    <span style="padding-left: 24px;">
+        {% if status %}
+        恭喜你! {{ title }} [ 版本：{{ version }} ] 安装成功。
+        {% else %}
+        很遗憾，安装失败 <br/> {{ error }}
+        {% endif %}
+    </span>
+</form>
+<div class="info_header">
+
+
+</div>
+{% endblock %}

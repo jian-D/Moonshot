@@ -1,0 +1,93 @@
+{% extends 'boot/frame.twig.html' %}
+
+{% block frame_content %}
+<div>
+    <form class="well form-search" method="post" action="#">
+        <!--类型：-->
+        <!--<select name="ctype" style="width: 120px;">-->
+        <!--<option value='0'>全部</option>-->
+        <!--</select> &nbsp;&nbsp;-->
+        发布时间：
+        <input type="text" name="start_time" class="js-datetime" value="{{ formget.start_time|default('') }}" style="width: 120px;" autocomplete="off">-
+        <input type="text" class="js-datetime" name="end_time" value="{{ formget.end_time|default('') }}" style="width: 120px;" autocomplete="off"> &nbsp; &nbsp;
+        <select name="status" style="width: 90px;">
+            <option value='-1' {% if formget.status == -1 %}selected{% endif %}>全部</option>
+            <option value='0' {% if formget.status == 0 %}selected{% endif %}>未审核</option>
+            <option value='1' {% if formget.status == 1 %}selected{% endif %}>审核</option>
+            <option value='2' {% if formget.status == 2 %}selected{% endif %}>发布</option>
+
+        </select>
+        &nbsp; &nbsp;
+        <input type="text" name="keyword" style="width: 200px;" value="{{ formget.keyword|default('') }}" placeholder="请输入关键字...">
+
+        <input id="default_search_btn" type="submit" class="btn btn-primary" value="搜索" />
+
+        <a href="javascript:void(0);" id="toogle_more"><i class="fa fa-chevron-down"></i>高级</a>
+        <a class="btn btn-danger"  href="#">清空</a>
+        <div id="more_box" style="display: none;">
+            <hr/>
+
+            <input type="text" name="source" style="width: 200px;" value="{{ formget.source|default('') }}" placeholder="请输入来源...">
+            <input type="submit" class="btn btn-primary" value="搜索" />
+        </div>
+
+    </form>
+</div>
+<div>
+    <ul>
+        {% if plugin_lists %}
+        {% for key,val in plugin_lists %}
+        <li>
+            {% if val.base.icon %}
+            <a href="{{val.info_url}}"><img class="icon" src="/assets/plugin/{{val.file}}/{{val.base.icon}}" /></a>
+            {% else %}
+            <img class="icon" src="#"/>
+            {% endif %}
+            <div class="info">
+                <div class="pl_title"><a href="{{val.info_url}}">{{val.base.title}} V{{val.base.version}}</a></div>
+                <div class="pl_cate">分类:{{val.base.category}}</div>
+                <!--<div class="pl_info">{{val.base.desc}}</div>-->
+                <div class="pl_author">作者:{{val.base.author}}</div>
+                <div class="pl_time">时间:{{val.base.time}}</div>
+                <div class="pl_op">操作:
+                    <a href="{{val.uninstall_url}}">卸载</a>
+                    <a href="{{val.review_url}}">审核</a>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+        {% endif %}
+    </ul>
+</div>
+{% endblock %}
+
+{% block frame_footer %}
+
+<script>
+    $(document).ready(function() {
+        Wind.css('treeTable');
+        Wind.use('treeTable', function() {
+            $("#menus-table").treeTable({
+                indent : 20
+            });
+        });
+
+        $('#toogle_more').click(function(){
+            if($('#more_box').css('display')=='block'){
+                $(this).html('<i class="fa fa-chevron-down"></i>高级');
+                //$(this).find('i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+                $('#more_box').css('display','none');
+                $('#default_search_btn').css('display','inline-block');
+            }else{
+                //$(this).find('i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+                $('#more_box').css('display','block');
+                $(this).html('<i class="fa fa-chevron-up"></i>收起');
+                $('#default_search_btn').css('display','none');
+                //$('#default_search_btn').attr('type','text');
+            }
+        })
+    });
+
+
+</script>
+{% endblock %}

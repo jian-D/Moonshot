@@ -46,6 +46,7 @@
 
 # Embedded web-server pid file
 /.web-server-pid
+.DS_Store
 
 # customs
 /jobs/caches/
@@ -54,6 +55,7 @@ composer.lock
 public/upload/*
 public/res/*
 public/tmp/*
+public/data/*
 /data/
 .idea/
 # test

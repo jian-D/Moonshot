@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+    <base>
+        <title>Demo</title>
+        <name>Demo</name>
+        <desc><![CDATA[very simple demo for developer]]></desc>
+        <category>default</category>
+        <version>1.0</version>
+        <author>xieq</author>
+        <time>2018-07-10</time>
+        <icon>icon.png</icon>
+    </base>
+    <menus></menus>
+    <install>
+    </install>
+</root>

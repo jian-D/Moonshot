@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<root>
+    <base>
+        <title>广告管理</title>
+        <name>adv_manager</name>
+        <desc><![CDATA[广告管理插件]]></desc>
+        <category>default</category>
+        <version>1.0</version>
+        <author>xieq</author>
+        <time>2018-07-10</time>
+        <icon>icon.png</icon>
+    </base>
+    <menus>
+        <item>
+            <name>广告管理</name>
+            <action>index</action>
+            <submenu>
+                <item>
+                    <name>广告位管理</name>
+                    <action>position</action>
+                </item>
+                <item>
+                    <name>广告管理</name>
+                    <action>adv</action>
+                </item>
+                <item>
+                    <name>日志管理</name>
+                    <action>log</action>
+                </item>
+            </submenu>
+        </item>
+    </menus>
+    <install>
+        <table>
+            <![CDATA[
+            CREATE TABLE `adv_position` (
+              `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+              `company_id` int(10) unsigned NOT NULL COMMENT '商业id',
+              `category` tinyint(1) NOT NULL DEFAULT '1' COMMENT '类型 1: 默认',
+              `position_name` varchar(255) NOT NULL COMMENT '广告位名称',
+              `position_alias` varchar(50) NOT NULL COMMENT '广告位标识',
+              `position_desc` text COMMENT '广告位描述',
+              `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态 1: 正常,0:关闭',
+              `operator` varchar(255) null COMMENT '操作者',
+              `ctime` int(11) NOT NULL COMMENT '创建时间',
+              `mtime` int(11) NOT NULL COMMENT '修改时间',
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `uni_company_alias` (`company_id`,`position_alias`),
+              KEY `idx_position_name` (`position_name`),
+              KEY `idx_status` (`status`),
+              KEY `idx_category` (`category`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='广告位管理';
+        ]]>
+        </table>
+        <table>
+            <![CDATA[
+            CREATE TABLE `adv_content` (
+              `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+              `company_id` int(10) unsigned NOT NULL COMMENT '商业id',
+              `position_id` int(10) unsigned  NULL COMMENT '位置id',
+              `category` tinyint(1) NOT NULL DEFAULT '1' COMMENT '类型 1: 默认',
+              `ad_name` varchar(255) NOT NULL COMMENT '广告名称',
+              `ad_alias` varchar(50) NOT NULL COMMENT '广告标识',
+              `ad_desc` text COMMENT '广告描述',
+              `ad_contents` text COMMENT '广告内容',
+              `expire_start_day` int(10) DEFAULT NULL COMMENT '有效期开始时间',
+              `expire_end_day` int(10) DEFAULT NULL COMMENT '有效期截止时间',
+              `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态 1: 正常,0:关闭',
+              `operator` varchar(255) null COMMENT '操作者',
+              `ctime` int(11) NOT NULL COMMENT '创建时间',
+              `mtime` int(11) NOT NULL COMMENT '修改时间',
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `uni_company_alias` (`company_id`,`ad_alias`),
+              KEY `idx_ad_name` (`ad_name`),
+              KEY `idx_status` (`status`),
+              KEY `idx_position_id` (`position_id`),
+              KEY `idx_start_day` (`expire_start_day`),
+              KEY `idx_end_day` (`expire_end_day`),
+              KEY `idx_category` (`category`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='广告管理';
+        ]]>
+        </table>
+        <table>
+            <![CDATA[
+            CREATE TABLE `adv_log` (
+              `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+              `company_id` int(10) unsigned NOT NULL COMMENT '商业id',
+              `position_id` int(10) unsigned  NULL COMMENT '位置id',
+              `adv_id` int(10) unsigned  NULL COMMENT '广告id',
+              `logs_contents` text COMMENT '日志内容',
+              `log_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '类型,1:pv,2:uv',
+              `ctime` int(11) NOT NULL COMMENT '创建时间',
+              PRIMARY KEY (`id`),
+              KEY `idx_company_id` (`company_id`),
+              KEY `idx_position_id` (`position_id`),
+              KEY `idx_adv_id` (`adv_id`),
+              KEY `log_type` (`log_type`),
+              KEY `idx_ctime` (`ctime`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='广告日志管理';
+        ]]>
+        </table>
+        <init>
+            <![CDATA[
+
+            ]]>
+        </init>
+    </install>
+    <upgrade>
+
+    </upgrade>
+</root>
