@@ -290,7 +290,6 @@ class Plugins extends PermissionBase
             }
         }
 
-
         return $this->render($status,$mess,$data,'template','plugin/info');
     }
 

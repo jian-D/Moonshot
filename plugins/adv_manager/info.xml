@@ -9,6 +9,11 @@
         <author>xieq</author>
         <time>2018-07-10</time>
         <icon>icon.png</icon>
+        <preview>
+            <item>preview_1.jpg</item>
+            <item>preview_2.jpg</item>
+            <item>preview_3.jpg</item>
+        </preview>
     </base>
     <menus>
         <item>
