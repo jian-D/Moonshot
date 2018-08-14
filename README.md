@@ -236,6 +236,7 @@ $this->db->getConnection()->disableQueryLog();
 * slim-session https://github.com/bryanjhv/slim-session
 * cookie https://github.com/delight-im/PHP-Cookie
 * PHP-SQL-Parser https://github.com/greenlion/PHP-SQL-Parser
+* swiper https://www.swiper.com.cn/demo/index.html
 
 
 
