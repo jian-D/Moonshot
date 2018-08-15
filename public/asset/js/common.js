@@ -410,6 +410,38 @@ if ($('.js-ajax-changeStatus').length) {
 }
 
 
+    //非ajax comfirm
+    if ($('a.js-dialog-btn').length) {
+        Wind.use('artDialog', function () {
+            $('.js-dialog-btn').on('click', function (e) {
+                e.preventDefault();
+                var $_this = this,
+                    $this = $($_this),
+                    href = $this.data('href'),
+                    msg = $this.data('msg');
+                href = href ? href : $this.attr('href');
+                if (!msg) {
+                    msg = "您确定要进行此操作吗？";
+                }
+                art.dialog({
+                    title: false,
+                    icon: 'question',
+                    content: msg,
+                    follow: $_this,
+                    close: function () {
+                        $_this.focus(); //关闭时让触发弹窗的元素获取焦点
+                        return true;
+                    },
+                    ok: function () {
+                        redirect(href);
+                    },
+                    cancelVal: '关闭',
+                    cancel: true
+                });
+            });
+
+        });
+    }
     
     if ($('a.js-ajax-dialog-btn').length) {
         Wind.use('artDialog', function () {

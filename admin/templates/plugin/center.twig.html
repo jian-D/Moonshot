@@ -34,7 +34,7 @@
     </form>
 </div>
 <div>
-    <ul>
+    <ul style="padding-left: 10px;">
         {% if plugin_lists %}
         {% for key,val in plugin_lists %}
         <li>
@@ -51,10 +51,10 @@
                 <div class="pl_time">时间:{{val.base.time}}</div>
                 <div class="pl_op">操作:
                     {% if val.installed == 1 %}
-                    <a href="{{val.uninstall_url}}">卸载</a>
-                    <a href="{{val.review_url}}">审核</a>
+                    <a href="{{val.uninstall_url}}" class="js-dialog-btn" data-msg="确定卸载该插件吗？">卸载</a>
+                    <a href="{{val.review_url}}">审计</a>
                     {% else %}
-                    <a href="{{val.install_url}}">安装</a>
+                    <a href="{{val.install_url}}" class="js-dialog-btn" data-msg="确定安装该插件吗？">安装</a>
                     {% endif %}
 
                 </div>

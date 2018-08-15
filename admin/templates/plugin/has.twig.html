@@ -34,7 +34,7 @@
     </form>
 </div>
 <div>
-    <ul>
+    <ul style="padding-left: 10px;">
         {% if plugin_lists %}
         {% for key,val in plugin_lists %}
         <li>
@@ -50,8 +50,8 @@
                 <div class="pl_author">作者:{{val.base.author}}</div>
                 <div class="pl_time">时间:{{val.base.time}}</div>
                 <div class="pl_op">操作:
-                    <a href="{{val.uninstall_url}}">卸载</a>
-                    <a href="{{val.review_url}}">审核</a>
+                    <a href="{{val.uninstall_url}}" class="js-dialog-btn" data-msg="确定卸载该插件吗？">卸载</a>
+                    <a href="{{val.review_url}}">审计</a>
                 </div>
             </div>
         </li>

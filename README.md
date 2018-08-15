@@ -193,6 +193,40 @@ $log = $this->db->getConnection()->getQueryLog();
 $this->db->getConnection()->disableQueryLog();
 ```
 
+# Monolog 使用和不同水平日志的添加
+* 添加信息日志
+```
+    $this->service->getLogger()->addInfo($info);
+```
+* 添加警告日志
+```
+    $this->service->getLogger()->addWarning($info);
+```
+* 添加注意日志
+```
+    $this->service->getLogger()->addNotice($info);
+```
+* 添加错误日志
+```
+    $this->service->getLogger()->addError($info);
+```
+* 添加调试日志
+```
+    $this->service->getLogger()->addDebug($info);
+```
+* 添加报警日志
+```
+    $this->service->getLogger()->addAlert($info);
+```
+* 添加关键日志
+```
+    $this->service->getLogger()->addCritical($info);
+```
+* 添加紧急日志
+```
+    $this->service->getLogger()->addEmergency($info);
+```
+
 
 # docs
 * twig文档 https://www.kancloud.cn/yunye/twig-cn/159454
@@ -202,6 +236,7 @@ $this->db->getConnection()->disableQueryLog();
 * slim-session https://github.com/bryanjhv/slim-session
 * cookie https://github.com/delight-im/PHP-Cookie
 * PHP-SQL-Parser https://github.com/greenlion/PHP-SQL-Parser
+* swiper https://www.swiper.com.cn/demo/index.html
 
 
 

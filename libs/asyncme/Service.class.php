@@ -19,6 +19,8 @@ class Service
     private $db = null;
     //缓存对象
     private $cache = null;
+    //日志对象
+    private $logger = null;
     //redis对象
     private $session = null;
     //redis对象
@@ -53,7 +55,7 @@ class Service
         return $this->request_helper;
     }
 
-    //设在db对象
+    //设置db对象
     public function setDb($db_obj)
     {
         $this->db = $db_obj;
@@ -62,6 +64,16 @@ class Service
     public function getDb()
     {
         return $this->db;
+    }
+    //设置日志对象
+    public function setLogger($log_obj)
+    {
+        $this->logger = $log_obj;
+    }
+    //获得日志对象
+    public function getLogger()
+    {
+        return $this->logger;
     }
     //设置session对象
     public function setSession($session)

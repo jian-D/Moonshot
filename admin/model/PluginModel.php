@@ -14,6 +14,7 @@ class PluginModel extends AdminModel
 
     protected $plugin_menu_table = 'sys_plugins_menu';
     protected $plugin_table = 'sys_plugins';
+    protected $plugins_rel_table = 'sys_plugins_rel';
 
 
     public function has_table($table_name)
@@ -33,6 +34,9 @@ class PluginModel extends AdminModel
 
     public function backup_plugin_tables($plugin_name,$tables,$backup_root='')
     {
+        if (!$backup_root || !is_dir($backup_root)) {
+            throw new \Exception('目录为空');
+        }
         $log_name = $plugin_name.'_'.date('YmdHis',time()).".sql";
         $backup_log = $backup_root."/".$log_name;
         $logs = [];
@@ -64,7 +68,7 @@ class PluginModel extends AdminModel
                     if ($count) {
                         $max_id = $this->db->table($table_name)->max('id');
                         $min_id = $this->db->table($table_name)->min('id');
-                        $step = 2;
+                        $step = 1000;
                         $current_start_id = $min_id;
                         $current_end_id = ($min_id+$step)<=$max_id ? ($min_id+$step) : $max_id;
 
@@ -98,7 +102,6 @@ class PluginModel extends AdminModel
                     }
 
                 }
-                //dump($res);
                 file_put_contents($backup_log,implode('',$logs),FILE_APPEND);
                 $logs = [];
             }
@@ -122,6 +125,20 @@ class PluginModel extends AdminModel
             $res[$key]['items'] = $subMenus;
         }
         return $res;
+    }
+
+    /**
+     * 关联关系表
+     * @param $where
+     */
+    public function getPluginRelCount($where)
+    {
+        return $this->db->table($this->plugins_rel_table)->where($where)->count();
+    }
+
+    public function deletePluginRel($where)
+    {
+        return $this->db->table($this->plugins_rel_table)->where($where)->delete();
     }
 
     /**
@@ -153,6 +170,11 @@ class PluginModel extends AdminModel
     public function updatePluginMenu($where,$map)
     {
         return $this->db->table($this->plugin_menu_table)->where($where)->update($map);
+    }
+
+    public function deletePluginMenu($where)
+    {
+        return $this->db->table($this->plugin_menu_table)->where($where)->delete();
     }
 
     /**
@@ -209,6 +231,9 @@ class PluginModel extends AdminModel
         return $this->db->table($this->plugin_table)->where($where)->update($map);
     }
 
-
+    public function deletePlugin($where)
+    {
+        return $this->db->table($this->plugin_table)->where($where)->delete();
+    }
 
 }

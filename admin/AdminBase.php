@@ -70,8 +70,9 @@ class AdminBase extends Plugins
     protected function recursion_menus(RequestHelper $req,$menus)
     {
         if($menus) foreach ($menus as $key=>$val) {
+            $mark = $val['app']=='admin' ? 'sys' : 'plugin';
             $path = [
-                'mark' => 'sys',
+                'mark' => $mark,
                 'bid'  => $req->company_id,
                 'pl_name'=>$val['app'],
             ];
