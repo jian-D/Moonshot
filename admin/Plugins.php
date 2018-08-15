@@ -293,7 +293,98 @@ class Plugins extends PermissionBase
         return $this->render($status,$mess,$data,'template','plugin/info');
     }
 
+    public function reviewAction(RequestHelper $req,array $preData)
+    {
 
+        $plugin_id = $req->query_datas['plugin_id'];
+        $status = false;
+        $mess = '失败';
+
+        $path = [
+            'mark' => 'sys',
+            'bid'  => $req->company_id,
+            'pl_name'=>'admin',
+        ];
+        $query = [
+            'mod'=>'plugins',
+            'act'=>'center',
+
+        ];
+        $back_url = urlGen($req,$path,$query,true);
+
+        $data = [
+            'back_url'=>$back_url,
+        ];
+
+
+        if($req->query_datas['file'] && $plugin_id) {
+            $plugin_lists = $this->load_plugin_datas($req,$preData,$req->query_datas['file']);
+
+            if ($plugin_id > 0) {
+                $plugin_dao = new model\PluginModel($this->service);
+                $where = [
+                    'id'=>$plugin_id
+                ];
+
+                $install_plugin_item = $plugin_dao->getPluginInfo($where,['id','title','class_name','version']);
+                if ($install_plugin_item) {
+                    $installed = 1;
+                }
+            }
+
+
+            if ($plugin_lists) {
+                $path = [
+                    'mark' => 'sys',
+                    'bid'  => $req->company_id,
+                    'pl_name'=>'admin',
+                ];
+                $query = [
+                    'mod'=>'plugins',
+                    'installed'=>$installed,
+                    'plugin_id' => $plugin_id,
+                ];
+
+                foreach ($plugin_lists as $key => $val) {
+
+                    $plugin_lists[$key]['installed'] = $installed;
+
+                    $file = $val['base']['name'] ? strtolower($val['base']['name']) : $val['file'];
+                    $install_url = array_merge($query,['act'=>'install','file'=>$file]);
+                    $plugin_lists[$key]['install_url'] = urlGen($req,$path,$install_url,true);
+
+                    $upgrade_url = array_merge($query,['act'=>'upgrade','file'=>$file]);
+                    $plugin_lists[$key]['upgrade_url'] = urlGen($req,$path,$upgrade_url,true);
+
+                    $uninstall_url = array_merge($query,['act'=>'uninstall','file'=>$file]);
+                    $plugin_lists[$key]['uninstall_url'] = urlGen($req,$path,$uninstall_url,true);
+
+                    $review_url = array_merge($query,['act'=>'review','file'=>$file]);
+                    $plugin_lists[$key]['review_url'] = urlGen($req,$path,$review_url,true);
+
+                    $info_url = array_merge($query,['act'=>'info','file'=>$file]);
+                    $plugin_lists[$key]['info_url'] = urlGen($req,$path,$info_url,true);
+                }
+                reset($plugin_lists);
+
+                $status = true;
+                $mess = '成功';
+                $data = array_merge($data,[
+                    'plugin_lists'=>$plugin_lists[0],
+                ]);
+                //dump($plugin_lists[0]);
+
+            }
+        } else {
+            $status = false;
+            $mess = '失败';
+            $data = [
+                'error'=>'参数错误',
+            ];
+        }
+
+        return $this->render($status,$mess,$data,'template','plugin/review');
+    }
 
     public function uninstallAction(RequestHelper $req,array $preData)
     {
